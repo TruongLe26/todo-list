@@ -73,7 +73,11 @@
             <h2>Notifications</h2>
             <ul>
                 <th:block th:each="notification : ${notifications}">
-                    <li th:text="${notification.message}"></li>
+<!--                    <li th:text="${notification.message}"></li>-->
+                    <li>
+                        <span th:text="'[' + ${#dates.format(notification.createdOn, 'yyyy-MM-dd HH:mm:ss')} + ']'"></span>
+                        <span th:text="${notification.message}"></span>
+                    </li>
                 </th:block>
             </ul>
 <!--            <div id="notificationDiv">-->
