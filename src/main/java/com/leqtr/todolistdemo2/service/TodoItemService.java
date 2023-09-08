@@ -8,7 +8,8 @@ import java.util.List;
 
 public interface TodoItemService {
 
-    List<TodoItem> getTodoItems();
+    List<TodoItem> getUncompletedTodoItem();
+    List<TodoItem> getCompletedTodoItem();
     void saveTodoItem(TodoItem todoItem);
     TodoItem getTodoItemById(long id);
     void deleteTodoItemById(long id);

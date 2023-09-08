@@ -32,6 +32,9 @@ public class User {
 
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "users_roles",
@@ -43,6 +46,13 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference
     private Set<TodoItem> items;
+
+    @OneToMany(mappedBy = "userNoti", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private Set<Notification> notifications;
+
+    @OneToMany(mappedBy = "user")
+    Set<GroupRole> groupRoles;
 
     public User(String firstName, String lastName, String email, String password, Collection<Role> roles) {
         super();

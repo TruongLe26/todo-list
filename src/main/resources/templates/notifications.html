@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>To-do List</title>
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>-->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>-->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>-->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>-->
+<!--    <script>-->
+<!--        var socket = new SockJS('/ws');-->
+<!--        var stompClient = Stomp.over(socket);-->
+
+<!--        stompClient.connect({}, function (frame) {-->
+<!--            stompClient.subscribe('/notifications', function (notification) {-->
+<!--                var message = JSON.parse(notification.body);-->
+<!--                displayNotification(message.content);-->
+<!--                // var message = notification.body;-->
+<!--                // displayNotification(message);-->
+<!--            });-->
+<!--        });-->
+
+<!--        function displayNotification(content) {-->
+<!--            var notificationDiv = document.getElementById('notificationDiv');-->
+<!--            -->
+<!--            var notificationElement = document.createElement('div');-->
+<!--            notificationElement.textContent = content;-->
+<!--            -->
+<!--            notificationDiv.appendChild(notificationElement);-->
+<!--        }-->
+<!--    </script>-->
+
+</head>
+<body>
+
+<!-- create navigation bar ( header) -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                    aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span> <span
+                    class="icon-bar"></span> <span class="icon-bar"></span> <span
+                    class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#" th:href="@{/}">TO-DO LIST</a>
+        </div>
+
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/groups}">Group</a></li>
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/notifications}">Notification</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!--<br>-->
+<!--<br>-->
+<div class="container" style="margin-top: 60px;">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <h2>Notifications</h2>
+            <ul>
+                <th:block th:each="notification : ${notifications}">
+                    <li th:text="${notification.message}"></li>
+                </th:block>
+            </ul>
+<!--            <div id="notificationDiv">-->
+                <!-- Notifications will be displayed here dynamically -->
+<!--            </div>-->
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -70,8 +70,13 @@
                 </div>
             </form>
             <div class="form-group">
-						<span>New user? <a href="/" th:href="@{/registration}">Create new account</a></span>
+						<span>New user? <a href="/" th:href="@{/registration}">Create new account</a></span><br>
             </div>
+
+            <div>
+                <a th:href="@{${'http://localhost:8080/oauth2/authorization/google'}}">Login with Google</a>
+            </div>
+
         </div>
     </div>
 </div>

@@ -39,7 +39,7 @@ title %0
 @REM enable echoing by setting MAVEN_BATCH_ECHO to 'on'
 @if "%MAVEN_BATCH_ECHO%" == "on"  echo %MAVEN_BATCH_ECHO%
 
-@REM set %HOME% to equivalent of \\#[[\\#[[\#[[\$]]#]]\#]]\\#HOME
+@REM set %HOME% to equivalent of \\\\\\\\\#[[\\\\\\\\\#[[\\\\\\\\#[[\\\\\\\#[[\\\\\\#[[\\\\\#[[\\\\#[[\\\#[[\\#[[\#[[\$]]#]]\#]]\\#]]\\\#]]\\\\#]]\\\\\#]]\\\\\\#]]\\\\\\\#]]\\\\\\\\#]]\\\\\\\\\#HOME
 if "%HOME%" == "" (set "HOME=%HOMEDRIVE%%HOMEPATH%")
 
 @REM Execute a user defined script before this one
@@ -141,11 +141,11 @@ if exist %WRAPPER_JAR% (
     )
 
     powershell -Command "&{"^
-		"\\#[[\\#[[\#[[\$]]#]]\#]]\\#webclient = new-object System.Net.WebClient;"^
+		"\\\\\\\\\#[[\\\\\\\\\#[[\\\\\\\\#[[\\\\\\\#[[\\\\\\#[[\\\\\#[[\\\\#[[\\\#[[\\#[[\#[[\$]]#]]\#]]\\#]]\\\#]]\\\\#]]\\\\\#]]\\\\\\#]]\\\\\\\#]]\\\\\\\\#]]\\\\\\\\\#webclient = new-object System.Net.WebClient;"^
 		"if (-not ([string]::IsNullOrEmpty('%MVNW_USERNAME%') -and [string]::IsNullOrEmpty('%MVNW_PASSWORD%'))) {"^
-		"\\#[[\\#[[\#[[\$]]#]]\#]]\\#webclient.Credentials = new-object System.Net.NetworkCredential('%MVNW_USERNAME%', '%MVNW_PASSWORD%');"^
+		"\\\\\\\\\#[[\\\\\\\\\#[[\\\\\\\\#[[\\\\\\\#[[\\\\\\#[[\\\\\#[[\\\\#[[\\\#[[\\#[[\#[[\$]]#]]\#]]\\#]]\\\#]]\\\\#]]\\\\\#]]\\\\\\#]]\\\\\\\#]]\\\\\\\\#]]\\\\\\\\\#webclient.Credentials = new-object System.Net.NetworkCredential('%MVNW_USERNAME%', '%MVNW_PASSWORD%');"^
 		"}"^
-		"[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \\#[[\\#[[\#[[\$]]#]]\#]]\\#webclient.DownloadFile('%WRAPPER_URL%', '%WRAPPER_JAR%')"^
+		"[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \\\\\\\\\#[[\\\\\\\\\#[[\\\\\\\\#[[\\\\\\\#[[\\\\\\#[[\\\\\#[[\\\\#[[\\\#[[\\#[[\#[[\$]]#]]\#]]\\#]]\\\#]]\\\\#]]\\\\\#]]\\\\\\#]]\\\\\\\#]]\\\\\\\\#]]\\\\\\\\\#webclient.DownloadFile('%WRAPPER_URL%', '%WRAPPER_JAR%')"^
 		"}"
     if "%MVNW_VERBOSE%" == "true" (
         echo Finished downloading %WRAPPER_JAR%
@@ -160,8 +160,8 @@ FOR /F "usebackq tokens=1,2 delims==" %%A IN ("%MAVEN_PROJECTBASEDIR%\.mvn\wrapp
 )
 IF NOT %WRAPPER_SHA_256_SUM%=="" (
     powershell -Command "&{"^
-       "\\#[[\\#[[\#[[\$]]#]]\#]]\\#hash = (Get-FileHash \"%WRAPPER_JAR%\" -Algorithm SHA256).Hash.ToLower();"^
-       "If('%WRAPPER_SHA_256_SUM%' -ne \\#[[\\#[[\#[[\$]]#]]\#]]\\#hash){"^
+       "\\\\\\\\\#[[\\\\\\\\\#[[\\\\\\\\#[[\\\\\\\#[[\\\\\\#[[\\\\\#[[\\\\#[[\\\#[[\\#[[\#[[\$]]#]]\#]]\\#]]\\\#]]\\\\#]]\\\\\#]]\\\\\\#]]\\\\\\\#]]\\\\\\\\#]]\\\\\\\\\#hash = (Get-FileHash \"%WRAPPER_JAR%\" -Algorithm SHA256).Hash.ToLower();"^
+       "If('%WRAPPER_SHA_256_SUM%' -ne \\\\\\\\\#[[\\\\\\\\\#[[\\\\\\\\#[[\\\\\\\#[[\\\\\\#[[\\\\\#[[\\\\#[[\\\#[[\\#[[\#[[\$]]#]]\#]]\\#]]\\\#]]\\\\#]]\\\\\#]]\\\\\\#]]\\\\\\\#]]\\\\\\\\#]]\\\\\\\\\#hash){"^
        "  Write-Output 'Error: Failed to validate Maven wrapper SHA-256, your Maven wrapper might be compromised.';"^
        "  Write-Output 'Investigate or delete %WRAPPER_JAR% to attempt a clean download.';"^
        "  Write-Output 'If you updated your Maven version, you need to update the specified wrapperSha256Sum property.';"^

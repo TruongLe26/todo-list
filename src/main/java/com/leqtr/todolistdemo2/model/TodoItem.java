@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -41,9 +43,19 @@ public class TodoItem {
     @JsonManagedReference
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "in_group", referencedColumnName = "id")
+    @JsonManagedReference
+    private Group inGroup;
+
     private boolean complete;
 
     private Timestamp completedOn;
+
+    @ManyToOne
+    @JoinColumn(name = "updated_by", referencedColumnName = "email")
+    @JsonManagedReference
+    private User updUser;
 
 //    private LocalDateTime intendedTime;
 

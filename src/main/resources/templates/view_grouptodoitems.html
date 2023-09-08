@@ -8,7 +8,6 @@
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
           crossorigin="anonymous">
-
 </head>
 <body>
 
@@ -25,12 +24,12 @@
             </button>
             <a class="navbar-brand" href="#" th:href="@{/}">TO-DO LIST</a>
         </div>
-<!--        <div id="navbar" class="collapse navbar-collapse">-->
-<!--            <ul class="nav navbar-nav">-->
-<!--                <li sec:authorize="isAuthenticated()"><a th:href="@{/groups}">Group</a></li>-->
-<!--                <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>-->
-<!--            </ul>-->
-<!--        </div>-->
+        <!--        <div id="navbar" class="collapse navbar-collapse">-->
+        <!--            <ul class="nav navbar-nav">-->
+        <!--                <li sec:authorize="isAuthenticated()"><a th:href="@{/groups}">Group</a></li>-->
+        <!--                <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>-->
+        <!--            </ul>-->
+        <!--        </div>-->
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li sec:authorize="isAuthenticated()"><a th:href="@{/groups}">Group</a></li>
@@ -50,9 +49,9 @@
     <h3>
         Welcome, <span th:text="${curUser}" style="color: deepskyblue"></span>
     </h3>
-    <h2>Your to-do list</h2>
+    <h2>Group's to-do list</h2>
 
-    <a th:href = "@{/showNewTodoItemForm}" class="btn btn-primary btn-sm mb-3"> Add new todo </a>
+    <a th:href = "@{/groups/showNewGroupTodoItemForm/{id}(id=${groupId})}" class="btn btn-primary btn-sm mb-3"> Add new to-do item to group </a>
 
     <table border="1" class = "fixed table table-striped table-responsive-md">
         <thead>
@@ -65,18 +64,18 @@
                 <a th:href="@{'/page/' + ${currentPage} + '?sortField=lastName&sortDir=' + ${reverseSortDir}}">
                     Description</a>
             </th>
-<!--            <th>-->
-<!--                <a th:href="@{'/page/' + ${currentPage} + '?sortField=lastName&sortDir=' + ${reverseSortDir}}">-->
-<!--                    Intended time</a>-->
-<!--            </th>-->
-<!--            <th>-->
-<!--                <a th:href="@{'/page/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir}}">-->
-<!--                    Complete</a>-->
-<!--            </th>-->
-<!--            <th>-->
-<!--                <a th:href="@{'/page/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir}}">-->
-<!--                    Completed on</a>-->
-<!--            </th>-->
+            <!--            <th>-->
+            <!--                <a th:href="@{'/page/' + ${currentPage} + '?sortField=lastName&sortDir=' + ${reverseSortDir}}">-->
+            <!--                    Intended time</a>-->
+            <!--            </th>-->
+            <th>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir}}">
+                    Complete</a>
+            </th>
+            <th>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir}}">
+                    Completed on</a>
+            </th>
             <th>
                 <a th:href="@{'/page/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir}}">
                     Created on</a>
@@ -85,20 +84,25 @@
                 <a th:href="@{'/page/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir}}">
                     Updated on</a>
             </th>
+            <th>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir}}">
+                    Updated by</a>
+            </th>
             <th> Actions </th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="todoitem : ${listTodoItems}" th:if="${!todoitem.complete}" th:class="${todoitem.complete} ? success : warning">
-            <td th:text="${todoitem.title}"></td>
-            <td th:text="${todoitem.description}"></td>
-<!--            <td th:text="${todoitem.intendedTime}"></td>-->
-<!--            <td th:text="${todoitem.complete}"></td>-->
-<!--            <td th:text="${todoitem.complete ? todoitem.updatedOn : ''}"></td>-->
-            <td th:text="${todoitem.createdOn}"></td>
-            <td th:text="${todoitem.updatedOn}"></td>
-            <td> <a th:href="@{/showFormForUpdate/{id}(id=${todoitem.id})}" class="btn btn-primary" th:classappend="${todoitem.complete} ? 'disabled'">Update</a>
-                <a th:href="@{/deleteTodoItem/{id}(id=${todoitem.id})}" class="btn btn-danger">Delete</a>
+        <tr th:each="groupTodoItem : ${groupTodoItems}" th:class="${groupTodoItem.complete} ? success : warning">
+            <td th:text="${groupTodoItem.title}"></td>
+            <td th:text="${groupTodoItem.description}"></td>
+            <!--            <td th:text="${todoitem.intendedTime}"></td>-->
+            <td th:text="${groupTodoItem.complete}"></td>
+            <td th:text="${groupTodoItem.complete ? groupTodoItem.updatedOn : ''}"></td>
+            <td th:text="${groupTodoItem.createdOn}"></td>
+            <td th:text="${groupTodoItem.updatedOn}"></td>
+            <td th:text="${groupTodoItem.updUser.email}"></td>
+            <td> <a th:href="@{/groups/showFormForUpdateGroupTodoItem/{groupId}/{id}(groupId=${groupId},id=${groupTodoItem.id})}" class="btn btn-primary" th:classappend="${groupTodoItem.complete} ? 'disabled'">Update</a>
+                <a th:href="@{/groups/deleteGroupTodoItem/{groupId}/{id}(groupId=${groupId},id=${groupTodoItem.id})}" class="btn btn-danger">Delete</a>
             </td>
         </tr>
         </tbody>
@@ -126,33 +130,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Add a new table for completed to-do items -->
-    <br>
-    <h2>Completed</h2>
-    <table border="1" class="fixed table table-striped table-responsive-md">
-        <thead>
-        <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Completed On</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Iterate through completed to-do items -->
-        <tr th:each="completedTodo : ${completedTodoItems}" th:class="success">
-            <td th:text="${completedTodo.title}"></td>
-            <td th:text="${completedTodo.description}"></td>
-            <td th:text="${completedTodo.updatedOn}"></td>
-            <td>
-                <!-- Add actions for completed to-do items -->
-                <a th:href="@{/deleteTodoItem/{id}(id=${completedTodo.id})}" class="btn btn-danger">Delete</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-
 </div>
 </body>
 </html>

@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/todolistdemo
+    url: jdbc:mysql://localhost:3306/todolistdemo2
     username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -11,6 +11,17 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id:
+            client-secret:
+            scope:
+              - email
+              - profile
+
 logging:
   level:
     org.hibernate.sql: debug

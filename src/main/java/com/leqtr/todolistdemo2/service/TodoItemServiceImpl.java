@@ -22,25 +22,27 @@ public class TodoItemServiceImpl implements TodoItemService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private SecurityUtil securityUtil;
+
     @Override
-    public List<TodoItem> getTodoItems() {
-        String username = SecurityUtil.getSessionUser();
-        User user = userRepository.findByEmail(username);
-        List<TodoItem> todoItems = todoItemRepository.findAll();
-        List<TodoItem> finalTodoItems = new ArrayList<>();
-        for (TodoItem todoItem : todoItems) {
-            if (todoItem.getUser().getEmail().equals(user.getEmail())) {
-                finalTodoItems.add(todoItem);
-            }
-        }
-        return finalTodoItems;
+    public List<TodoItem> getUncompletedTodoItem() {
+        String username = securityUtil.getSessionUser();
+        return todoItemRepository.findUncompletedTodoItemByUsername(username);
+    }
+
+    @Override
+    public List<TodoItem> getCompletedTodoItem() {
+        String username = securityUtil.getSessionUser();
+        return todoItemRepository.findCompletedTodoItemByUsername(username);
     }
 
     @Override
     public void saveTodoItem(TodoItem todoItem) {
-        String username = SecurityUtil.getSessionUser();
+        String username = securityUtil.getSessionUser();
         User user = userRepository.findByEmail(username);
         todoItem.setUser(user);
+        todoItem.setUpdUser(user);
         todoItemRepository.save(todoItem);
     }
 
@@ -67,7 +69,7 @@ public class TodoItemServiceImpl implements TodoItemService {
                 Sort.by(sortField).ascending() : Sort.by(sortField).descending();
 
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        List<TodoItem> curList = getTodoItems();
+        List<TodoItem> curList = getUncompletedTodoItem();
         return new PageImpl<>(curList.subList(
                 (int) pageable.getOffset(),
                 Math.min(

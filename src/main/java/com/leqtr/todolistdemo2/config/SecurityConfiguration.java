@@ -1,5 +1,6 @@
 package com.leqtr.todolistdemo2.config;
 
+import com.leqtr.todolistdemo2.service.CustomOAuth2UserService;
 import com.leqtr.todolistdemo2.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +11,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -20,6 +20,12 @@ public class SecurityConfiguration {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CustomOAuth2UserService oAuth2UserService;
+
+    @Autowired
+    private SecurityUtil securityUtil;
 
     @Bean
     public static BCryptPasswordEncoder passwordEncoder() {
@@ -33,12 +39,23 @@ public class SecurityConfiguration {
                         .requestMatchers(
                                 "/registration**",
                                 "/js/**",
-                                "/img/**"
+                                "/img/**",
+                                "/oauth/**",
+                                "/groups/**"
                         ).permitAll()
                         .anyRequest().authenticated())
                 .formLogin(login -> login
                         .loginPage("/login")
                         .permitAll())
+                .oauth2Login(auth -> auth
+                        .loginPage("/login")
+                        .userInfoEndpoint(endpoint -> endpoint
+                                .userService(oAuth2UserService)
+                        )
+                        .successHandler((request, response, authentication) -> {
+                            userService.processOAuthPostLogin(securityUtil.getSessionUser());
+                            response.sendRedirect("/");
+                        }))
                 .logout(logout -> logout
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)

@@ -20,6 +20,9 @@ public class TodoItemController {
     @Autowired
     private TodoItemService todoItemService;
 
+    @Autowired
+    private SecurityUtil securityUtil;
+
     @GetMapping("/")
     public ModelAndView viewHomePage(Model model) {
         return findPaginated(1, "title", "asc", model);
@@ -74,8 +77,10 @@ public class TodoItemController {
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
 
         model.addAttribute("listTodoItems", listTodoItems);
+        List<TodoItem> completedTodoItems = todoItemService.getCompletedTodoItem();
+        model.addAttribute("completedTodoItems", completedTodoItems);
 
-        String username = SecurityUtil.getSessionUser();
+        String username = securityUtil.getInfo();
         model.addAttribute("curUser", username);
 
         return new ModelAndView("index");
