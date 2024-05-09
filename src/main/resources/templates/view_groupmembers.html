@@ -1,50 +1,57 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-bs-theme="dark">
 <head>
-    <meta charset="ISO-8859-1">
+    <meta charset="UTF-8">
     <title>To-do List</title>
-
-    <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-          crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
-<body>
 
-<!-- create navigation bar ( header) -->
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed"
-                    data-toggle="collapse" data-target="#navbar" aria-expanded="false"
-                    aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span> <span
-                    class="icon-bar"></span> <span class="icon-bar"></span> <span
-                    class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#" th:href="@{/}">TO-DO LIST</a>
-        </div>
-        <!--        <div id="navbar" class="collapse navbar-collapse">-->
-        <!--            <ul class="nav navbar-nav">-->
-        <!--                <li sec:authorize="isAuthenticated()"><a th:href="@{/groups}">Group</a></li>-->
-        <!--                <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>-->
-        <!--            </ul>-->
-        <!--        </div>-->
-        <div id="navbar" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li sec:authorize="isAuthenticated()"><a th:href="@{/groups}">Group</a></li>
-                <li sec:authorize="isAuthenticated()"><a th:href="@{/notifications}">Notification</a></li>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">TO-DO LIST</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" th:href="@{/}">Home</a>
+                </li>
+                <!--                <li class="nav-item">-->
+                <!--                    <a class="nav-link" href="#">Link</a>-->
+                <!--                </li>-->
+                <li sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/groups}">Group</a>
+                </li>
+                <li sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/notifications}">Notification</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Account
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Change username</a></li>
+                        <li><a class="dropdown-item" href="#">Change password</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" th:href="@{/logout}">Sign out</a></li>
+                    </ul>
+                </li>
+                <!--                <li class="nav-item">-->
+                <!--                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>-->
+                <!--                </li>-->
             </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
-            </ul>
+            <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
         </div>
     </div>
 </nav>
-
 <br>
 <br>
-
 <div class="container my-2">
     <h3>
         Welcome, <span th:text="${curUser}" style="color: deepskyblue"></span>

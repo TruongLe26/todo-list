@@ -21,8 +21,16 @@ spring:
             scope:
               - email
               - profile
-
+#  cache:
+#    type: redis
+#    redis:
+#      cache-null-values: true
+#  data:
+#    redis:
+#      host: localhost
+#      port: 6379
 logging:
   level:
     org.hibernate.sql: debug
     org.hibernate.type: trace
+#    org.springframework.data.redis: DEBUG
