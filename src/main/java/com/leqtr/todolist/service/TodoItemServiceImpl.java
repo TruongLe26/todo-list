@@ -6,6 +6,7 @@ import com.leqtr.todolist.model.User;
 import com.leqtr.todolist.repository.TodoItemRepository;
 import com.leqtr.todolist.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
@@ -23,15 +24,29 @@ public class TodoItemServiceImpl implements TodoItemService {
     private final SecurityUtil securityUtil;
 
     @Override
-//    @Cacheable(value = "UncompletedTodoItem")
+//    @Cacheable(value = "uncompletedTodoItem")
     public List<TodoItem> getUncompletedTodoItem() {
+//        try {
+//            System.out.println("Retrieving uncompleted to-do items...");
+//            Thread.sleep(3000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
         String username = securityUtil.getSessionUser();
         return todoItemRepository.findUncompletedTodoItemByUsername(username);
     }
 
     @Override
-//    @Cacheable(value = "CompletedTodoItem")
+//    @Cacheable(value = "completedTodoItem")
     public List<TodoItem> getCompletedTodoItem() {
+//        try {
+//            System.out.println("Retrieving uncompleted to-do items...");
+//            Thread.sleep(3000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
         String username = securityUtil.getSessionUser();
         return todoItemRepository.findCompletedTodoItemByUsername(username);
     }
@@ -47,7 +62,7 @@ public class TodoItemServiceImpl implements TodoItemService {
     }
 
     @Override
-//    @Cacheable(value = "TodoItemById", key = "#id")
+//    @Cacheable(value = "todoItemById", key = "#id")
     public TodoItem getTodoItemById(long id) {
         Optional<TodoItem> optional = todoItemRepository.findById(id);
         TodoItem todoItem = null;

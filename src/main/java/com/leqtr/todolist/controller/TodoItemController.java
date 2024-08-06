@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @RestController
@@ -73,7 +74,9 @@ public class TodoItemController {
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
 
         model.addAttribute("listTodoItems", listTodoItems);
+        loggingMessage("Request received!");
         List<TodoItem> completedTodoItems = todoItemService.getCompletedTodoItem();
+        loggingMessage("Data retrieved!");
         model.addAttribute("completedTodoItems", completedTodoItems);
 
         String username = securityUtil.getInfo();
@@ -82,4 +85,7 @@ public class TodoItemController {
         return new ModelAndView("index");
     }
 
+    private void loggingMessage(String message) {
+        System.out.printf("[%s] %s%n", java.time.LocalTime.now().truncatedTo(ChronoUnit.MILLIS), message);
+    }
 }
