@@ -1,4 +1,4 @@
-package com.leqtr.todolist.config;
+package com.leqtr.todolist.configuration;
 
 import com.leqtr.todolist.service.CustomOAuth2UserService;
 import com.leqtr.todolist.service.UserService;
@@ -6,12 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -21,29 +17,15 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfiguration {
 
     private final UserService userService;
-
     private final CustomOAuth2UserService oAuth2UserService;
-
     private final SecurityUtil securityUtil;
-
-    @Bean
-    @Lazy
-    public static BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     @Bean
     @Lazy
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/registration**",
-                                "/js/**",
-                                "/img/**",
-                                "/oauth/**",
-                                "/groups/**"
-                        ).permitAll()
+                        .requestMatchers(WhitelistUrls.WHITELIST).permitAll()
                         .anyRequest().authenticated())
                 .formLogin(login -> login
                         .loginPage("/login")
@@ -51,8 +33,7 @@ public class SecurityConfiguration {
                 .oauth2Login(auth -> auth
                         .loginPage("/login")
                         .userInfoEndpoint(endpoint -> endpoint
-                                .userService(oAuth2UserService)
-                        )
+                                .userService(oAuth2UserService))
                         .successHandler((request, response, authentication) -> {
                             userService.processOAuthPostLogin(securityUtil.getSessionUser());
                             response.sendRedirect("/");
@@ -65,20 +46,4 @@ public class SecurityConfiguration {
                         .permitAll());
         return http.build();
     }
-
-    @Bean
-    @Lazy
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
-        auth.setUserDetailsService(userService);
-        auth.setPasswordEncoder(passwordEncoder());
-        return auth;
-    }
-
-    @Bean
-    @Lazy
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration builder) throws Exception {
-        return builder.getAuthenticationManager();
-    }
-
 }

@@ -1,4 +1,4 @@
-package com.leqtr.todolist.config;
+package com.leqtr.todolist.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

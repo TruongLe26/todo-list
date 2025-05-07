@@ -1,6 +1,6 @@
 package com.leqtr.todolist.controller;
 
-import com.leqtr.todolist.config.SecurityUtil;
+import com.leqtr.todolist.configuration.SecurityUtil;
 import com.leqtr.todolist.model.*;
 import com.leqtr.todolist.service.GroupService;
 import com.leqtr.todolist.service.NotificationService;

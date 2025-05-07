@@ -1,6 +1,6 @@
 package com.leqtr.todolist.service;
 
-import com.leqtr.todolist.config.SecurityUtil;
+import com.leqtr.todolist.configuration.SecurityUtil;
 import com.leqtr.todolist.model.*;
 import com.leqtr.todolist.repository.GroupRepository;
 import com.leqtr.todolist.repository.GroupRoleRepository;

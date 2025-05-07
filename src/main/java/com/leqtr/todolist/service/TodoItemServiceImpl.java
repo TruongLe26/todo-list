@@ -1,12 +1,11 @@
 package com.leqtr.todolist.service;
 
-import com.leqtr.todolist.config.SecurityUtil;
+import com.leqtr.todolist.configuration.SecurityUtil;
 import com.leqtr.todolist.model.TodoItem;
 import com.leqtr.todolist.model.User;
 import com.leqtr.todolist.repository.TodoItemRepository;
 import com.leqtr.todolist.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.leqtr.todolist.config;
+package com.leqtr.todolist.configuration;
 
 import com.leqtr.todolist.model.User;
 import com.leqtr.todolist.repository.UserRepository;

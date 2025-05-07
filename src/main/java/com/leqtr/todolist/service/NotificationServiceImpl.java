@@ -1,6 +1,6 @@
 package com.leqtr.todolist.service;
 
-import com.leqtr.todolist.config.SecurityUtil;
+import com.leqtr.todolist.configuration.SecurityUtil;
 import com.leqtr.todolist.model.Notification;
 import com.leqtr.todolist.model.User;
 import com.leqtr.todolist.repository.NotificationRepository;
