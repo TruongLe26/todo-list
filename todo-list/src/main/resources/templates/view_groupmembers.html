@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <title>To-do List</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+
+<body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container my-2">
+    <h3>
+        Welcome, <span th:text="${curUser}" style="color: deepskyblue"></span>
+    </h3>
+    <h2>Group members</h2>
+
+    <table border="1" class = "fixed table table-striped table-responsive-md">
+        <thead>
+        <tr>
+            <th>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=firstName&sortDir=' + ${reverseSortDir}}">
+                    Email</a>
+            </th>
+            <th>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=lastName&sortDir=' + ${reverseSortDir}}">
+                    First name</a>
+            </th>
+            <!--            <th>-->
+            <!--                <a th:href="@{'/page/' + ${currentPage} + '?sortField=lastName&sortDir=' + ${reverseSortDir}}">-->
+            <!--                    Intended time</a>-->
+            <!--            </th>-->
+            <th>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir}}">
+                    Last name</a>
+            </th>
+<!--            <th>-->
+<!--                <a th:href="@{'/page/' + ${currentPage} + '?sortField=lastName&sortDir=' + ${reverseSortDir}}">-->
+<!--                    Role</a>-->
+<!--            </th>-->
+            <th> Actions </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="mem : ${mems}">
+<!--            <td th:text="${groupId}"></td>-->
+            <td th:text="${mem.email}"></td>
+            <td th:text="${mem.firstName}"></td>
+            <!--            <td th:text="${todoitem.intendedTime}"></td>-->
+            <td th:text="${mem.lastName}"></td>
+<!--            <td th:text="${mem.roles}"></td>-->
+            <td>
+                <div class="d-flex gap-2">
+                    <button class="icon-btn btn-primary"
+                            title="Promote to Admin"
+                            th:onclick="|location.href='@{/groups/promoteUser/{groupId}/{id}(groupId=${groupId}, id=${mem.id})}'|"
+                            th:classappend="${!isAdmin} ? ' disabled'">
+                        <i class="material-icons">arrow_upward</i>
+                    </button>
+
+                    <button class="icon-btn btn-danger"
+                            title="Kick User"
+                            th:onclick="|location.href='@{/groups/removeUser/{groupId}/{id}(groupId=${groupId}, id=${mem.id})}'|"
+                            th:classappend="${!isAdmin} ? ' disabled'">
+                        <i class="material-icons">person_remove</i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div th:if = "${totalPages > 1}">
+        <div class = "row col-sm-10">
+            <div class = "col-sm-2">
+                Total Rows: [[${totalItems}]]
+            </div>
+            <div class = "col-sm-1">
+					<span th:each="i: ${#numbers.sequence(1, totalPages)}">
+						<a th:if="${currentPage != i}" th:href="@{'/page/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
+						<span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;
+					</span>
+            </div>
+            <div class = "col-sm-1">
+                <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
+                <span th:unless="${currentPage < totalPages}">Next</span>
+            </div>
+
+            <div class="col-sm-1">
+                <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a>
+                <span th:unless="${currentPage < totalPages}">Last</span>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

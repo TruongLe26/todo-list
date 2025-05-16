@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <title>To-do List</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+
+<body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container my-2">
+    <h3>
+        Welcome, <span th:text="${curUser}" style="color: deepskyblue"></span>
+    </h3>
+    <h2>Groups</h2>
+
+    <button class="icon-btn btn-primary mb-3" title="Create new group"
+            data-bs-toggle="modal" data-bs-target="#createGroupModal">
+        <i class="material-icons">group_add</i>
+    </button>
+
+    <table border="1" class = "fixed table table-striped table-responsive-md">
+        <thead>
+        <tr>
+            <th class="group-name">
+                <a th:href="@{'/groups/page/' + ${currentPage} + '?sortField=firstName&sortDir=' + ${reverseSortDir}}">
+                    Name</a>
+            </th>
+            <th> Actions </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="group : ${groups}">
+            <td th:text="${group.name}"></td>
+            <td>
+                <div class="d-flex gap-2">
+                    <button class="icon-btn btn-primary" title="View Members"
+                            th:onclick="'location.href=\'' + @{/groups/viewMembers/{id}(id=${group.id})} + '\''">
+                        <i class="material-icons">group</i>
+                    </button>
+
+                    <button id="addMemberBtn"
+                            class="icon-btn btn-primary" title="Add New Member"
+                            data-bs-toggle="modal" data-bs-target="#addMemberModal"
+                            th:attr="data-group-id=${group.id}">
+                        <i class="material-icons">person_add</i>
+                    </button>
+
+                    <button class="icon-btn btn-primary" title="View To-Do Items"
+                            th:onclick="'location.href=\'' + @{/groups/viewTodoItems/{id}(id=${group.id})} + '\''">
+                        <i class="material-icons">checklist</i>
+                    </button>
+
+                    <button class="icon-btn btn-danger" title="Leave Group"
+                            th:onclick="'location.href=\'' + @{/groups/leaveGroup/{id}(id=${group.id})} + '\''">
+                        <i class="material-icons">exit_to_app</i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div th:if = "${totalPages > 1}">
+        <div class = "row col-sm-10">
+            <div class = "col-sm-2">
+                Total Rows: [[${totalItems}]]
+            </div>
+            <div class = "col-sm-1">
+					<span th:each="i: ${#numbers.sequence(1, totalPages)}">
+						<a th:if="${currentPage != i}" th:href="@{'/groups/page/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
+						<span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;
+					</span>
+            </div>
+            <div class = "col-sm-1">
+                <a th:if="${currentPage < totalPages}" th:href="@{'/groups/page/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
+                <span th:unless="${currentPage < totalPages}">Next</span>
+            </div>
+
+            <div class="col-sm-1">
+                <a th:if="${currentPage < totalPages}" th:href="@{'/groups/page/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a>
+                <span th:unless="${currentPage < totalPages}">Last</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="createGroupModal" tabindex="-1" aria-labelledby="createGroupModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createModalLabel">Create new group</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="createGroupForm" method="POST">
+                    <div class="mb-3">
+                        <label for="createGroupName" class="form-label">Name</label>
+                        <input type="text" id="createGroupName" name="name" class="form-control" placeholder="Name" required>
+                    </div>
+                    <button type="submit" class="btn btn-success mt-3">Create</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addMemberModal" tabindex="-1" aria-labelledby="addMemberModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addMemberModalLabel">Add user to group</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addMemberForm" method="POST">
+                    <input type="hidden" id="groupIdForAdd">
+                    <div class="mb-3">
+                        <label for="memberEmail" class="form-label">Email address</label>
+                        <input type="text" id="memberEmail" name="name" class="form-control" placeholder="Email address" required>
+<!--                        <div th:id="addMemberError" th:class="text-danger mt-2"></div>-->
+                    </div>
+                    <button type="submit" class="btn btn-success mt-3">Add</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/group-creation.js}"></script>
+<script th:src="@{/js/group-members.js}"></script>
+</body>
+</html>

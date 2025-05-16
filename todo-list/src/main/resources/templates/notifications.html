@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <title>To-do List</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+
+<body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container" style="margin-top: 60px;">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <h2>Notifications</h2>
+            <ul>
+                <th:block th:each="notification : ${notifications}">
+<!--                    <li th:text="${notification.message}"></li>-->
+                    <li>
+                        <span th:text="'[' + ${#dates.format(notification.createdOn, 'yyyy-MM-dd HH:mm:ss')} + ']'"></span>
+                        <span th:text="${notification.message}"></span>
+                    </li>
+                </th:block>
+            </ul>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

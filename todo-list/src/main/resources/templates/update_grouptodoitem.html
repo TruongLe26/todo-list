@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <title>To-do List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+
+<body>
+<div class="container">
+    <h1>TO-DO LIST</h1>
+    <hr>
+    <h2>Update to-do item</h2>
+
+    <form action="#" th:action="@{/updateTodoItem}" th:object="${todoitem}"
+          method="POST">
+
+        <input type="hidden" th:field="*{id}"/>
+
+        <input type="text" th:field="*{title}" placeholder="Title" class="form-control mb-4 col-4">
+
+        <input type="text" th:field="*{description}" placeholder="Description" class="form-control mb-4 col-4">
+
+        <div class="checkboxes">
+            <label>
+                <input type="checkbox" th:checked="*{complete} == true" th:field="*{complete}" id="complete" />
+                Complete
+            </label>
+        </div>
+
+        <button type="submit" class="btn btn-info col-2"> Update </button>
+    </form>
+
+    <hr>
+
+    <a th:href = "@{/groups/viewTodoItems/{id}(id=${groupId})}"> Back to to-do list</a>
+</div>
+</body>
+
+</html>

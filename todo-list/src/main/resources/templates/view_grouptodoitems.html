@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" data-bs-theme="dark">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>To-do List</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+
+<body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container my-2">
+    <h3>
+        Welcome, <span th:text="${curUser}" style="color: deepskyblue"></span>
+    </h3>
+    <h2>Group's to-do list</h2>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <button id="openCreateModalBtn" class="icon-btn btn-success" title="Create new group's todo item"
+                data-bs-toggle="modal"
+                data-bs-target="#createGroupTodoItemModal"
+                th:attr="data-group-id=${groupId}">
+            <i class="material-icons">add_circle</i>
+        </button>
+    </div>
+
+    <table border="1" class = "fixed table table-striped table-responsive-md">
+        <thead>
+        <tr>
+            <th class="group-todo-title">
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=firstName&sortDir=' + ${reverseSortDir}}">
+                    Title</a>
+            </th>
+            <th class="group-todo-description">
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=lastName&sortDir=' + ${reverseSortDir}}">
+                    Description</a>
+            </th>
+            <!--            <th>-->
+            <!--                <a th:href="@{'/page/' + ${currentPage} + '?sortField=lastName&sortDir=' + ${reverseSortDir}}">-->
+            <!--                    Intended time</a>-->
+            <!--            </th>-->
+            <th>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir}}">
+                    Complete</a>
+            </th>
+            <th>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir}}">
+                    Completed on</a>
+            </th>
+            <th>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir}}">
+                    Created on</a>
+            </th>
+            <th>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir}}">
+                    Updated on</a>
+            </th>
+            <th>
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir}}">
+                    Updated by</a>
+            </th>
+            <th> Actions </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="groupTodoItem : ${groupTodoItems}" th:class="${groupTodoItem.complete} ? success : warning">
+            <td th:text="${groupTodoItem.title}"></td>
+            <td th:text="${groupTodoItem.description}"></td>
+            <!--            <td th:text="${todoitem.intendedTime}"></td>-->
+            <td th:text="${groupTodoItem.complete}"></td>
+            <td th:text="${groupTodoItem.complete ? groupTodoItem.updatedOn : ''}"></td>
+            <td th:text="${groupTodoItem.createdOn}"></td>
+            <td th:text="${groupTodoItem.updatedOn}"></td>
+            <td th:text="${groupTodoItem.updatedBy}"></td>
+
+            <td>
+                <a href="#"
+                   class="btn-update"
+                   th:title="Edit"
+                   th:classappend="${groupTodoItem.complete} ? 'disabled'"
+                   th:data-id="${groupTodoItem.id}"
+                   th:data-title="${groupTodoItem.title}"
+                   th:data-description="${groupTodoItem.description}"
+                   th:data-complete="${groupTodoItem.complete}"
+                   th:data-group-id="${groupId}"
+                   data-bs-toggle="modal"
+                   data-bs-target="#updateGroupTodoItemModal">
+                    <i class="material-icons" style="font-size:24px;color:#007bff">edit</i>
+                </a>
+                <a th:href="@{/groups/deleteGroupTodoItem/{groupId}/{id}(groupId=${groupId}, id=${groupTodoItem.id})}"
+                   th:title="Delete"
+                   class="btn-delete">
+                    <i class="material-icons" style="font-size:24px;color:red">delete</i>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div th:if = "${totalPages > 1}">
+        <div class = "row col-sm-10">
+            <div class = "col-sm-2">
+                Total Rows: [[${totalItems}]]
+            </div>
+            <div class = "col-sm-1">
+					<span th:each="i: ${#numbers.sequence(1, totalPages)}">
+						<a th:if="${currentPage != i}" th:href="@{'/groups/viewTodoItems/' + ${groupId} + '/page/' + ${i}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
+						<span th:unless="${currentPage != i}">[[${i}]]</span>  &nbsp; &nbsp;
+					</span>
+            </div>
+            <div class = "col-sm-1">
+                <a th:if="${currentPage < totalPages}" th:href="@{'/groups/viewTodoItems/' + ${groupId} + '/page/' + ${currentPage + 1}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
+                <span th:unless="${currentPage < totalPages}">Next</span>
+            </div>
+
+            <div class="col-sm-1">
+                <a th:if="${currentPage < totalPages}" th:href="@{'/groups/viewTodoItems/' + ${groupId} + /page/' + ${totalPages}+ '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a>
+                <span th:unless="${currentPage < totalPages}">Last</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="fragments/modals :: #createGroupTodoItemModal"></div>
+<div th:replace="fragments/modals :: #updateGroupTodoItemModal"></div>
+
+<script th:src="@{/js/group-todo-creation.js}"></script>
+<script th:src="@{/js/group-todo-update.js}"></script>
+
+</body>
+</html>
