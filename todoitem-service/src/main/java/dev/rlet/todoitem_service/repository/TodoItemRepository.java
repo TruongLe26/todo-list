@@ -7,19 +7,19 @@ import org.springframework.data.mongodb.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
-public interface TodoItemRepository extends MongoRepository<TodoItem, String> {
+public interface TodoItemRepository extends MongoRepository<TodoItem, String>, CustomTodoItemRepository {
 
     @Query("{ 'title' : ?0 }")
     Optional<TodoItem> findByTitle(String title);
-
     @Query(value = "{ 'createdBy' : ?0 }", fields = "{ 'title' : 1, 'description' : 1 }")
     Optional<List<TodoItem>> findAll(String createdBy);
-
     long count();
-
-    @Query(value = "{ 'createdBy' : ?0 }")
+    @Query(value = "{ 'createdBy' : ?0, 'groupId' : null }")
     Optional<List<TodoItem>> findAllByCreatedBy(String createdBy);
-
-    List<TodoItem> findAllByCreatedByAndCompleteFalse(String createdBy);
-    List<TodoItem> findAllByCreatedByAndCompleteTrue(String createdBy);
+    @Query(value = "{ 'groupId' : ?0 }")
+    Optional<List<TodoItem>> findAllByGroupId(Long groupId);
+    @Query(value = "{ 'createdBy' : ?0, 'complete' : false, 'groupId' : null }")
+    List<TodoItem> findUncompletedUserTodoItems(String createdBy);
+    @Query(value = "{ 'createdBy' : ?0, 'complete' : true, 'groupId' : null }")
+    List<TodoItem> findCompletedUserTodoItems(String createdBy);
 }

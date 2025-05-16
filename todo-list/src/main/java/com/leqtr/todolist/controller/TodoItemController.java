@@ -2,11 +2,11 @@ package com.leqtr.todolist.controller;
 
 import com.leqtr.shared.dto.TodoItemDTO;
 import com.leqtr.todolist.configuration.SecurityUtil;
-//import com.leqtr.todolist.model.TodoItem;
 import com.leqtr.todolist.service.KafkaService;
 import com.leqtr.todolist.service.TodoItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -31,11 +31,15 @@ public class TodoItemController {
     @GetMapping("/showNewTodoItemForm")
     public ModelAndView showNewTodoItemForm() {
         ModelAndView register = new ModelAndView("new_todoitem");
-//        TodoItem todoItem = new TodoItem();
-//        register.addObject("todoitem", todoItem);
         TodoItemDTO todoItemDTO = new TodoItemDTO();
         register.addObject("todoitem", todoItemDTO);
         return register;
+    }
+
+    @GetMapping("/todoitems/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public TodoItemDTO getTodoItemById(@PathVariable String id) {
+        return todoItemService.getTodoItemById(id);
     }
 
     @PostMapping("/saveTodoItem")
@@ -43,12 +47,12 @@ public class TodoItemController {
         kafkaService.createTodoItem(todoItemDto);
         return new ModelAndView("redirect:/");
     }
-//
-//    @PostMapping("/saveTodoItem")
-//    public ModelAndView saveTodoItem(@ModelAttribute("todoitem") TodoItem todoItem) {
-//        TodoItem savedTodoItem = todoItemService.saveTodoItem(todoItem);
-//        return new ModelAndView("redirect:/");
-//    }
+
+    @PostMapping("/updateTodoItem")
+    public ModelAndView updateTodoItem(@ModelAttribute("todoitem") TodoItemDTO todoItemDto) {
+        todoItemService.updateTodoItem(todoItemDto);
+        return new ModelAndView("redirect:/");
+    }
 
     @GetMapping("/showFormForUpdate/{id}")
     public ModelAndView showFormForUpdate(@PathVariable(value = "id") String id, Model model) {
@@ -58,25 +62,18 @@ public class TodoItemController {
         return form;
     }
 
-//    @GetMapping("/showFormForUpdate/{id}")
-//    public ModelAndView showFormForUpdate(@PathVariable(value = "id") long id, Model model) {
-//        ModelAndView form = new ModelAndView("update_todoitem");
-//        TodoItem todoItem = todoItemService.getTodoItemById(id);
-//        form.addObject("todoitem", todoItem);
-//        return form;
-//    }
-
     @GetMapping("/deleteTodoItem/{id}")
     public ModelAndView deleteTodoItem(@PathVariable(value = "id") String id) {
         todoItemService.deleteTodoItemById(id);
         return new ModelAndView("redirect:/");
     }
 
-//    @GetMapping("/deleteTodoItem/{id}")
-//    public ModelAndView deleteTodoItem(@PathVariable(value = "id") long id) {
-//        todoItemService.deleteTodoItemById(id);
-//        return new ModelAndView("redirect:/");
-//    }
+    @PostMapping("/deleteTodoItems")
+    public ModelAndView batchDeleteTodoItem(@RequestParam("selectedIds") List<String> selectedIds) {
+        System.out.println("Selected IDs: " + selectedIds);
+        todoItemService.deleteTodoItems(selectedIds);
+        return new ModelAndView("redirect:/");
+    }
 
     @GetMapping("/page/{pageNo}")
     public ModelAndView findPaginated(

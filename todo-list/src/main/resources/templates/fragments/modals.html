@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createModalLabel">Create To-Do Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="createForm" method="POST">
+                    <div class="mb-3">
+                        <label for="createTitle" class="form-label">Title</label>
+                        <input type="text" id="createTitle" name="title" class="form-control" placeholder="Title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="createDescription" class="form-label">Description</label>
+                        <input type="text" id="createDescription" name="description" class="form-control" placeholder="Description">
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="createComplete" name="complete" class="form-check-input">
+                        <label for="createComplete" class="form-check-label">Complete</label>
+                    </div>
+                    <button type="submit" class="btn btn-success mt-3">Create</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="createGroupTodoItemModal" tabindex="-1" aria-labelledby="createGroupTodoItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createGroupTodoItemModalLabel">Create Group's To-Do Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="createGroupTodoItemForm"
+                      action=""
+                      method="POST">
+
+                    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                    <input type="hidden" id="groupIdHidden" name="groupId">
+                    <div class="mb-3">
+                        <label for="createGroupTodoItemTitle" class="form-label">Title</label>
+                        <input type="text" id="createGroupTodoItemTitle" name="title" class="form-control" placeholder="Title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="createGroupTodoItemDescription" class="form-label">Description</label>
+                        <input type="text" id="createGroupTodoItemDescription" name="description" class="form-control" placeholder="Description">
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="createGroupTodoItemComplete" name="complete" class="form-check-input">
+                        <label for="createGroupTodoItemComplete" class="form-check-label">Complete</label>
+                    </div>
+                    <button type="submit" class="btn btn-success mt-3">Create</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="batchUpdateModal" tabindex="-1" aria-labelledby="batchUpdateModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="batchUpdateModalLabel">Batch Update To-Do Items</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="batchUpdateForm" method="POST" action="/updateTodoItemsBatch">
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info">Update All</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateModalLabel">Update To-Do Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="updateForm" method="POST">
+                    <input type="hidden" id="todoId" name="id" />
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title</label>
+                        <input type="text" id="title" name="title" class="form-control" placeholder="Title">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <input type="text" id="description" name="description" class="form-control" placeholder="Description">
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="complete" name="complete" class="form-check-input">
+                        <label for="complete" class="form-check-label">Complete</label>
+                    </div>
+                    <button type="submit" class="btn btn-info mt-3">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updateGroupTodoItemModal" tabindex="-1" aria-labelledby="updateGroupTodoItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateGroupTodoItemModalLabel">Update group's to-do item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="updateGroupTodoItemForm" method="POST">
+                    <input type="hidden" id="groupTodoId" name="id" />
+                    <input type="hidden" id="groupTodoItemGroupId" name="groupId"/>
+
+                    <div class="mb-3">
+                        <label for="groupTodoItemTitle" class="form-label">Title</label>
+                        <input type="text" id="groupTodoItemTitle" name="title" class="form-control" placeholder="Title">
+                    </div>
+                    <div class="mb-3">
+                        <label for="groupTodoItemDescription" class="form-label">Description</label>
+                        <input type="text" id="groupTodoItemDescription" name="description" class="form-control" placeholder="Description">
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="groupTodoItemComplete" name="complete" class="form-check-input">
+                        <label for="groupTodoItemComplete" class="form-check-label">Complete</label>
+                    </div>
+                    <button type="submit" class="btn btn-info mt-3">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

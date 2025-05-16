@@ -12,7 +12,7 @@
     <hr>
     <h2>Update to-do item</h2>
 
-    <form action="#" th:action="@{/groups/updateGroupTodoItem/{groupId}(groupId=${groupId})}" th:object="${todoitem}"
+    <form action="#" th:action="@{/updateTodoItem}" th:object="${todoitem}"
           method="POST">
 
         <input type="hidden" th:field="*{id}"/>
