@@ -28,8 +28,8 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-    properties:
-      spring.json.add.type.headers: false
+#    properties:
+#      spring.json.add.type.headers: false
   data:
     redis:
       host: localhost
@@ -40,6 +40,10 @@ spring:
 #      cache-null-values: true
 logging:
   level:
-    org.hibernate.sql: debug
-    org.hibernate.type: trace
+    org.springframework.kafka.org.springframework.kafka.listener: DEBUG
+    org.apache.kafka.clients.consumer: INFO
+    org.springframework.messaging: DEBUG
+    org.springframework.web.socket: DEBUG
+    org.hibernate.sql: DEBUG
+    org.hibernate.type: TRACE
 #    org.springframework.data.redis: DEBUG

@@ -13,7 +13,7 @@
                 <form id="createForm" method="POST">
                     <div class="mb-3">
                         <label for="createTitle" class="form-label">Title</label>
-                        <input type="text" id="createTitle" name="title" class="form-control" placeholder="Title" required>
+                        <input type="text" id="createTitle" name="title" class="form-control" placeholder="Title" required minlength="2">
                     </div>
                     <div class="mb-3">
                         <label for="createDescription" class="form-label">Description</label>
@@ -46,7 +46,7 @@
                     <input type="hidden" id="groupIdHidden" name="groupId">
                     <div class="mb-3">
                         <label for="createGroupTodoItemTitle" class="form-label">Title</label>
-                        <input type="text" id="createGroupTodoItemTitle" name="title" class="form-control" placeholder="Title" required>
+                        <input type="text" id="createGroupTodoItemTitle" name="title" class="form-control" placeholder="Title" required minlength="2">
                     </div>
                     <div class="mb-3">
                         <label for="createGroupTodoItemDescription" class="form-label">Description</label>
@@ -94,7 +94,7 @@
                     <input type="hidden" id="todoId" name="id" />
                     <div class="mb-3">
                         <label for="title" class="form-label">Title</label>
-                        <input type="text" id="title" name="title" class="form-control" placeholder="Title">
+                        <input type="text" id="title" name="title" class="form-control" placeholder="Title" required minlength="2">
                     </div>
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
@@ -125,7 +125,7 @@
 
                     <div class="mb-3">
                         <label for="groupTodoItemTitle" class="form-label">Title</label>
-                        <input type="text" id="groupTodoItemTitle" name="title" class="form-control" placeholder="Title">
+                        <input type="text" id="groupTodoItemTitle" name="title" class="form-control" placeholder="Title" required minlength="2">
                     </div>
                     <div class="mb-3">
                         <label for="groupTodoItemDescription" class="form-label">Description</label>

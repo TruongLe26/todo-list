@@ -8,5 +8,6 @@ public class WhitelistUrls {
             "/oauth/**",
             "/groups/**",
             "/api/todo",
+            "/ws/**",
     };
 }

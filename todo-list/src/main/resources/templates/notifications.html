@@ -18,18 +18,43 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <h2>Notifications</h2>
-            <ul>
+            <ul id="notificationList">
                 <th:block th:each="notification : ${notifications}">
-<!--                    <li th:text="${notification.message}"></li>-->
                     <li>
-                        <span th:text="'[' + ${#dates.format(notification.createdOn, 'yyyy-MM-dd HH:mm:ss')} + ']'"></span>
-                        <span th:text="${notification.message}"></span>
+                        <span th:text="'[' + ${notification.formattedDate} + ']'"></span>
+                        <span th:text="${notification.content}"></span>
                     </li>
                 </th:block>
             </ul>
         </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
+<script>
+    const socket = new SockJS('/ws');
+    const stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, () => {
+        stompClient.subscribe('/user/queue/notifications', (message) => {
+            const notification = JSON.parse(message.body);
+            const notificationList = document.getElementById('notificationList');
+
+            const li = document.createElement('li');
+            const timestamp = new Date(notification.timestamp).toLocaleString();
+            li.innerHTML = `<span>[${timestamp}]</span> <span>${notification.content}</span>`;
+
+            li.classList.add('new-notification', 'new-notification-highlight');
+            notificationList.prepend(li);
+
+            setTimeout(() => {
+                li.classList.remove('new-notification-highlight');
+            }, 5000);
+        });
+    });
+</script>
 
 </body>
 </html>

@@ -27,6 +27,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(WhitelistUrls.WHITELIST).permitAll()
                         .anyRequest().authenticated())
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/ws/**"))
                 .formLogin(login -> login
                         .loginPage("/login")
                         .permitAll())
