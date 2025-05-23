@@ -3,8 +3,10 @@ package com.leqtr.todolist.controller;
 import com.leqtr.todolist.dto.UserRegistrationDto;
 import com.leqtr.todolist.model.User;
 import com.leqtr.todolist.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -29,7 +31,9 @@ public class UserRegistrationController {
     }
 
     @PostMapping
-    public ModelAndView registerUserAccount(@ModelAttribute("user") UserRegistrationDto registrationDto) {
+    public ModelAndView registerUserAccount(
+            @ModelAttribute("user") @Valid UserRegistrationDto registrationDto,
+            BindingResult bindingResult) {
         String emailPattern = ".*@gmail\\.com$";
         Pattern pattern = Pattern.compile(emailPattern);
         Matcher matcher = pattern.matcher(registrationDto.getEmail());
@@ -39,6 +43,10 @@ public class UserRegistrationController {
             modelAndView.addObject("invalidEmail", true);
             modelAndView.addObject("emailError", "Invalid email, please use a Gmail address");
             return modelAndView;
+        }
+
+        if (bindingResult.hasErrors()) {
+            return new ModelAndView("registration");
         }
 
         User savedUser = userService.save(registrationDto);
@@ -51,5 +59,4 @@ public class UserRegistrationController {
 
         return new ModelAndView("redirect:/registration?success");
     }
-
 }

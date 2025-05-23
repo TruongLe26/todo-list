@@ -48,9 +48,9 @@ public class User implements Serializable {
 //    @JsonManagedReference
 //    private Set<TodoItem> items;
 
-    @OneToMany(mappedBy = "userNoti", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private Set<Notification> notifications;
+//    @OneToMany(mappedBy = "userNoti", cascade = CascadeType.ALL)
+//    @JsonManagedReference
+//    private Set<Notification> notifications;
 
     @OneToMany(mappedBy = "user")
     Set<GroupRole> groupRoles;
