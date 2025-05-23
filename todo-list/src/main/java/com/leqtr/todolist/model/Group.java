@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "group_table")
@@ -22,10 +23,6 @@ public class Group implements Serializable {
     private String name;
 
     @OneToMany(mappedBy = "group")
-    Set<GroupRole> groupRoles;
-
-//    @OneToMany(mappedBy = "inGroup", cascade = CascadeType.ALL)
-//    @JsonManagedReference
-//    private Set<TodoItem> groupItems;
-
+    @OrderColumn(name = "group_role_order")
+    private List<GroupRole> groupRoles = new ArrayList<>();
 }

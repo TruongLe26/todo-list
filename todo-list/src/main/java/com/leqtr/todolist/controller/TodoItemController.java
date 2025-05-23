@@ -2,7 +2,6 @@ package com.leqtr.todolist.controller;
 
 import com.leqtr.shared.dto.TodoItemDTO;
 import com.leqtr.todolist.configuration.SecurityUtil;
-import com.leqtr.todolist.service.KafkaService;
 import com.leqtr.todolist.service.TodoItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,7 +19,6 @@ import java.util.List;
 public class TodoItemController {
 
     private final TodoItemService todoItemService;
-    private final KafkaService kafkaService;
     private final SecurityUtil securityUtil;
 
     @GetMapping("/")
@@ -44,7 +42,7 @@ public class TodoItemController {
 
     @PostMapping("/saveTodoItem")
     public ModelAndView saveTodoItem(@ModelAttribute("todoitem") TodoItemDTO todoItemDto) {
-        kafkaService.createTodoItem(todoItemDto);
+        todoItemService.createTodoItem(todoItemDto);
         return new ModelAndView("redirect:/");
     }
 
@@ -85,7 +83,7 @@ public class TodoItemController {
         int pageSize = 5;
 
         // **
-        Page<TodoItemDTO> page = todoItemService.findPaginated(pageNo, pageSize, sortField, sortDir);
+        Page<TodoItemDTO> page = todoItemService.findPaginatedUncompletedTodoItems(pageNo, pageSize, sortField, sortDir);
         List<TodoItemDTO> listTodoItems = page.getContent();
 
         model.addAttribute("currentPage", pageNo);

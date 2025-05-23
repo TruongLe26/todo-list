@@ -4,18 +4,25 @@ spring:
       uri: ${MONGODB_URI}
       database: ${MONGODB_DATABASE}
   kafka:
-    bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
+    bootstrap-servers: "localhost:9092,localhost:9093,localhost:9094"
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      partitioner-class: dev.rlet.todoitem_service.kafka.partitioner.UserIdPartitioner
       properties:
         spring.json.add.type.headers: true
+        spring.json.type.mapping: >
+            TodoItemCreatedEvent:com.leqtr.shared.event.todo.TodoItemCreatedEvent,
+            TodoItemUpdatedEvent:com.leqtr.shared.event.todo.TodoItemUpdatedEvent,
+            TodoItemDeletedEvent:com.leqtr.shared.event.todo.TodoItemDeletedEvent
     consumer:
-      group-id: todoitem-service-test
+      group-id: "todoitem-service-test"
       auto-offset-reset: latest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: "com.leqtr.shared.dto"
+
 server:
   port: 8081

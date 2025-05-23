@@ -1,4 +1,4 @@
-package com.leqtr.todolist.service;
+package com.leqtr.todolist.service.impl;
 
 import com.leqtr.todolist.configuration.SecurityUtil;
 import com.leqtr.todolist.dto.UserRegistrationDto;
@@ -6,6 +6,7 @@ import com.leqtr.todolist.model.Provider;
 import com.leqtr.todolist.model.Role;
 import com.leqtr.todolist.model.User;
 import com.leqtr.todolist.repository.UserRepository;
+import com.leqtr.todolist.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

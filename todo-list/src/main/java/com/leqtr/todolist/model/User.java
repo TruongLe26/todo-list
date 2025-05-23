@@ -1,6 +1,5 @@
 package com.leqtr.todolist.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,8 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
@@ -44,16 +44,8 @@ public class User implements Serializable {
     )
     private Collection<Role> roles;
 
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//    @JsonManagedReference
-//    private Set<TodoItem> items;
-
-//    @OneToMany(mappedBy = "userNoti", cascade = CascadeType.ALL)
-//    @JsonManagedReference
-//    private Set<Notification> notifications;
-
     @OneToMany(mappedBy = "user")
-    Set<GroupRole> groupRoles;
+    private List<GroupRole> groupRoles = new ArrayList<>();
 
     public User(String firstName, String lastName, String email, String password, Collection<Role> roles) {
         super();

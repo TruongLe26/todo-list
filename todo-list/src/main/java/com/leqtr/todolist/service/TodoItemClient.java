@@ -15,6 +15,8 @@ public interface TodoItemClient {
     @GetMapping("/todoitems/{id}")
     TodoItemDTO getTodoItemById(@PathVariable("id") String id);
     @PostMapping("/todoitems")
+    void createTodoItem(@RequestBody TodoItemDTO todoItemDTO);
+    @PutMapping("/todoitems")
     void updateTodoItem(@RequestBody TodoItemDTO todoItemDTO);
     @DeleteMapping("/todoitems/{id}")
     void deleteTodoItemById(@PathVariable("id") String id);

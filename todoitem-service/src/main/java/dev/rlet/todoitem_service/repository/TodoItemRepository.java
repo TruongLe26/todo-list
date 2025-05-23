@@ -8,11 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TodoItemRepository extends MongoRepository<TodoItem, String>, CustomTodoItemRepository {
-
-    @Query("{ 'title' : ?0 }")
-    Optional<TodoItem> findByTitle(String title);
-    @Query(value = "{ 'createdBy' : ?0 }", fields = "{ 'title' : 1, 'description' : 1 }")
-    Optional<List<TodoItem>> findAll(String createdBy);
     long count();
     @Query(value = "{ 'createdBy' : ?0, 'groupId' : null }")
     Optional<List<TodoItem>> findAllByCreatedBy(String createdBy);

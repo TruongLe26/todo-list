@@ -7,11 +7,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Controller
 @RequiredArgsConstructor
@@ -32,18 +32,8 @@ public class UserRegistrationController {
 
     @PostMapping
     public ModelAndView registerUserAccount(
-            @ModelAttribute("user") @Valid UserRegistrationDto registrationDto,
+            @Valid @ModelAttribute("user") UserRegistrationDto registrationDto,
             BindingResult bindingResult) {
-        String emailPattern = ".*@gmail\\.com$";
-        Pattern pattern = Pattern.compile(emailPattern);
-        Matcher matcher = pattern.matcher(registrationDto.getEmail());
-
-        if (!matcher.matches()) {
-            ModelAndView modelAndView = new ModelAndView("registration");
-            modelAndView.addObject("invalidEmail", true);
-            modelAndView.addObject("emailError", "Invalid email, please use a Gmail address");
-            return modelAndView;
-        }
 
         if (bindingResult.hasErrors()) {
             return new ModelAndView("registration");

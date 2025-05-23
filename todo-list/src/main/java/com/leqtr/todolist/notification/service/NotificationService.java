@@ -1,13 +1,16 @@
-package com.leqtr.todolist.service;
+package com.leqtr.todolist.notification.service;
 
+import com.leqtr.todolist.dto.FormattedNotificationDto;
 import com.leqtr.todolist.dto.NotificationDto;
 import com.leqtr.todolist.model.Notification;
-import com.leqtr.todolist.repository.NotificationRepository;
+import com.leqtr.todolist.notification.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 
@@ -36,13 +39,21 @@ public class NotificationService {
         );
     }
 
-    public List<NotificationDto> getNotifications(String username) {
+    public List<FormattedNotificationDto> formatNotifications(String username) {
         List<Notification> notifications = notificationRepository.findByUsername(username);
         return notifications.stream()
                 .sorted(Comparator.comparing(Notification::getCreatedAt).reversed())
-                .map(notification -> new NotificationDto(
-                        notification.getMessage(),
-                        notification.getCreatedAt().toString()))
+                .map(notification -> {
+                    String timestamp = notification.getCreatedAt().toString();
+                    String formattedDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                            .withZone(ZoneId.systemDefault())
+                            .format(Instant.parse(timestamp));
+                    return new FormattedNotificationDto(
+                            notification.getMessage(),
+                            timestamp,
+                            formattedDate
+                    );
+                })
                 .toList();
     }
 }

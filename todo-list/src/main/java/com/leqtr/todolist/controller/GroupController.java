@@ -3,8 +3,8 @@ package com.leqtr.todolist.controller;
 import com.leqtr.shared.dto.TodoItemDTO;
 import com.leqtr.todolist.configuration.SecurityUtil;
 import com.leqtr.todolist.model.*;
-import com.leqtr.todolist.service.GroupService;
-import com.leqtr.todolist.service.NotificationService;
+import com.leqtr.todolist.service.impl.GroupServiceImpl;
+import com.leqtr.todolist.notification.service.NotificationService;
 import com.leqtr.todolist.service.TodoItemService;
 import com.leqtr.todolist.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import java.util.List;
 public class GroupController {
 
     private final UserService userService;
-    private final GroupService groupService;
+    private final GroupServiceImpl groupService;
     private final TodoItemService todoItemService;
     private final NotificationService notificationService;
     private final SecurityUtil securityUtil;

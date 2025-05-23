@@ -1,4 +1,4 @@
-package com.leqtr.todolist.repository;
+package com.leqtr.todolist.notification.repository;
 
 import com.leqtr.todolist.model.Notification;
 import org.springframework.data.jpa.repository.JpaRepository;

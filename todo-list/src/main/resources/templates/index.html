@@ -46,19 +46,19 @@
         <thead>
         <tr>
             <th class="title">
-                <a th:href="@{'/page/' + ${currentPage} + '?sortField=firstName&sortDir=' + ${reverseSortDir}}">
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=title&sortDir=' + ${reverseSortDir}}">
                     Title</a>
             </th>
             <th class="description">
-                <a th:href="@{'/page/' + ${currentPage} + '?sortField=lastName&sortDir=' + ${reverseSortDir}}">
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=description&sortDir=' + ${reverseSortDir}}">
                     Description</a>
             </th>
             <th class="created">
-                <a th:href="@{'/page/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir}}">
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=createdOn&sortDir=' + ${reverseSortDir}}">
                     Created on</a>
             </th>
             <th class="updated">
-                <a th:href="@{'/page/' + ${currentPage} + '?sortField=email&sortDir=' + ${reverseSortDir}}">
+                <a th:href="@{'/page/' + ${currentPage} + '?sortField=updatedOn&sortDir=' + ${reverseSortDir}}">
                     Updated on</a>
             </th>
             <th class="actions"> Actions </th>
@@ -147,9 +147,9 @@
     </table>
 </div>
 
-<div th:replace="fragments/modals :: #createModal"></div>
-<div th:replace="fragments/modals :: #batchUpdateModal"></div>
-<div th:replace="fragments/modals :: #updateModal"></div>
+<div th:replace="~{fragments/modals :: #createModal}"></div>
+<div th:replace="~{fragments/modals :: #batchUpdateModal}"></div>
+<div th:replace="~{fragments/modals :: #updateModal}"></div>
 
 <script th:src="@{/js/todo-creation.js}"></script>
 <script th:src="@{/js/todo-selection.js}"></script>

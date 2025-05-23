@@ -1,5 +1,6 @@
 package com.leqtr.todolist.configuration;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.BytesDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -16,12 +17,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
+@RequiredArgsConstructor
 public class KafkaConsumerConfiguration {
+
+    private final KafkaProperties kafkaProperties;
+
     @Bean
-    public ConsumerFactory<String, Bytes> consumerFactory() {
+    public ConsumerFactory<String, Bytes> notificationConsumerFactory() {
         Map<String, Object> consumerConfigs = new HashMap<>();
-        consumerConfigs.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092,localhost:9093,localhost:9094");
-        consumerConfigs.put(ConsumerConfig.GROUP_ID_CONFIG, "notification-group");
+        consumerConfigs.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
+        consumerConfigs.put(ConsumerConfig.GROUP_ID_CONFIG, kafkaProperties.getConsumer().getGroupId());
         return new DefaultKafkaConsumerFactory<>(
                 consumerConfigs,
                 new StringDeserializer(),
@@ -30,10 +35,10 @@ public class KafkaConsumerConfiguration {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Bytes> kafkaListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, Bytes> notificationKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, Bytes> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory());
+        factory.setConsumerFactory(notificationConsumerFactory());
         factory.setRecordMessageConverter(messageConverter());
         return factory;
     }
@@ -42,55 +47,4 @@ public class KafkaConsumerConfiguration {
     public RecordMessageConverter messageConverter() {
         return new BytesJsonMessageConverter();
     }
-
-    /* Old configuration */
-    //    @Bean
-//    public ConsumerFactory<String, Object> consumerFactory() {
-//        JsonDeserializer<Object> valueDeserializer = new JsonDeserializer<>();
-//        valueDeserializer.addTrustedPackages("com.leqtr.shared.event");
-//        valueDeserializer.setUseTypeMapperForKey(false);
-////        valueDeserializer.setRemoveTypeHeaders(false);
-//        valueDeserializer.setUseTypeHeaders(false);
-//
-//        // Use default type mapper
-////        valueDeserializer.setTypeMapper(new DefaultJackson2JavaTypeMapper());
-////        DefaultJackson2JavaTypeMapper typeMapper = new DefaultJackson2JavaTypeMapper();
-////        typeMapper.addTrustedPackages("com.leqtr.shared.event");
-//
-//
-//        ErrorHandlingDeserializer<Object> errorHandlingDeserializer
-//                = new ErrorHandlingDeserializer<>(valueDeserializer);
-//
-//        Map<String, Object> consumerConfigs = new HashMap<>();
-//        consumerConfigs.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092,localhost:9093,localhost:9094");
-//        consumerConfigs.put(ConsumerConfig.GROUP_ID_CONFIG, "notification-group");
-//
-//        return new DefaultKafkaConsumerFactory<>(
-//                consumerConfigs,
-//                new StringDeserializer(),
-//                errorHandlingDeserializer
-//        );
-//
-//        // Normal configuration
-////        Map<String, Object> consumerConfigs = new HashMap<>();
-////        consumerConfigs.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092,localhost:9093,localhost:9094");
-////        consumerConfigs.put(ConsumerConfig.GROUP_ID_CONFIG, "notification-group");
-////
-////        consumerConfigs.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
-////        consumerConfigs.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
-////        consumerConfigs.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, StringDeserializer.class);
-////        consumerConfigs.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JsonDeserializer.class);
-////
-////        consumerConfigs.put(JsonDeserializer.TRUSTED_PACKAGES, "com.leqtr.shared.event.base");
-////
-////        return new DefaultKafkaConsumerFactory<>(consumerConfigs);
-//    }
-//
-//    @Bean
-//    public ConcurrentKafkaListenerContainerFactory<String, Object> kafkaListenerContainerFactory() {
-//        ConcurrentKafkaListenerContainerFactory<String, Object> factory =
-//                new ConcurrentKafkaListenerContainerFactory<>();
-//        factory.setConsumerFactory(consumerFactory());
-//        return factory;
-//    }
 }
